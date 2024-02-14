@@ -1,0 +1,24 @@
+<ng-container *ngIf="is_browser">
+  <div class="scanner-container" #scannerContainer style="height: 100%;width: 100%">
+    <ngx-scanner-qrcode #action="scanner" [config]="config" style="height: 100%;width: 100%" (event)="onScan($event, action)"></ngx-scanner-qrcode>
+    <div class="controls">
+      <!--change cam-->
+      <button class="cam-control-btn switch" *ngIf="devices?.length > 1" [lazyLoad]="'/assets/images/icons/switch-cam-icon.png'" (click)="switch()"></button>
+
+      <!--torch-->
+      <button class="cam-control-btn torch" *ngIf="torcher" [ngClass]="{'active': action.isTorch}" [lazyLoad]="'/assets/images/icons/torch-cam-icon.png'" (click)="torch()"></button>
+    </div>
+  </div>
+  <app-loader
+    [show]="true"
+    [ngClass]="{'show': !action.isStart}"
+    #loader>
+  </app-loader>
+</ng-container>
+
+
+
+
+
+
+

@@ -1,1 +1,309 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "animations";
+
+@layer utilities{
+  .absolute-center{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+html{
+  --primary-bg: #1a1a1a;
+  --primary-color: #f3f3f3;
+  --primary-border-color: #2D2D2DFF;
+  --primary-border-radius: 12px;
+  --secondary-bg: #414141;
+  --secondary-color: #cbcbcb;
+  --primary-button-bg: #e1e1e1;
+  --primary-button-color: black;
+
+  --error-color: #c20000;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  &:focus{
+    outline: none;
+  }
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+body{
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: var(--primary-color);
+  background: var(--primary-bg);
+  position: relative;
+  min-height: 100vh;
+}
+.main {
+  padding: 80px 0 0;
+  @media screen and (max-width: 768px) {
+    padding: 60px 0 60px;
+    height: 100vh;
+    overflow: auto;
+  }
+}
+.content {
+  width: 100%;
+  max-width: 1090px;
+  margin: auto;
+  padding: 0 24px;
+
+  @media screen and (max-width: 425px) {
+    padding: 0 12px;
+  }
+}
+.button {
+  padding: 8px 24px;
+  background: var(--primary-color);
+  color: var(--primary-bg);
+  border-radius: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.form-fields__container{
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 24px;
+}
+
+.form-control-row{
+  display: flex;
+  flex-direction: column;
+
+  &.radio{
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: 16px;
+
+    .form-radio-control-inputs {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .form-radio-control-input{
+      margin-top: 12px;
+      &:first-child{
+        margin-top: 0;
+      }
+    }
+
+    span.form-control-placeholder {
+      line-height: 18px;
+    }
+
+    input[type="radio"]{
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+
+      + .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 18px;
+        text-transform: lowercase;
+
+        &:before {
+          content: "";
+          background: var(--secondary-bg);
+          border-radius: 100%;
+          border: 1px solid var(--secondary-bg);
+          width: 18px;
+          height: 18px;
+          transition: all 250ms ease;
+        }
+      }
+
+      &:checked {
+        + .radio-label {
+          &:before {
+            background-color: var(--secondary-color);
+            box-shadow: inset 0 0 0 4px var(--secondary-bg);
+          }
+        }
+
+        &:disabled{
+          + .radio-label{
+            &:before{
+              background: var(--secondary-color);
+              opacity: 0.6;
+            }
+          }
+        }
+      }
+      &:focus {
+        + .radio-label {
+          &:before {
+            outline: none;
+            border-color: var(--secondary-color);
+          }
+        }
+      }
+      &:disabled {
+        + .radio-label {
+          &:before {
+            box-shadow: inset 0 0 0 4px var(--secondary-bg);
+            border-color: var(--secondary-bg);
+            background: var(--secondary-bg);
+          }
+        }
+      }
+      + .radio-label {
+        &:empty {
+          &:before {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+
+  &:first-child{
+    margin-top: 0;
+  }
+
+  input.default{
+    z-index: 1;
+    padding: 0 20px;
+    line-height: 40px;
+    border-width: 0;
+    border-radius: var(--primary-border-radius);
+    background: var(--secondary-bg);
+    font-size: 14px;
+
+    &.ng-invalid.ng-touched {
+      outline:2px solid var(--error-color);
+      outline-offset:-2px;
+    }
+  }
+  input{
+    background: var(--secondary-bg);
+    color: var(--secondary-color);
+  }
+
+
+
+  .form-control-error {
+    font-size: 12px;
+    color: var(--error-color);
+    line-height: 12px;
+    text-align: center;
+    margin-top: 5px;
+  }
+
+  &.checkbox{
+    input{
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+
+      &:checked ~ .checkbox__checkmark {
+        background-color: var(--button-bg-color-blue);
+      }
+      &:checked ~ .checkbox__checkmark:after {
+        left: 21px;
+      }
+    }
+
+    label{
+      font-size: 16px;
+      display: inline-block;
+      position: relative;
+      padding-left: 50px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      &:hover input ~ .checkbox__checkmark {
+        background-color: var(--loading-bg-color);
+      }
+      &:hover input:checked ~ .checkbox__checkmark {
+        background-color: var(--button-bg-color-blue);
+      }
+    }
+
+    .checkbox__checkmark{
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 22px;
+      width: 40px;
+      background-color: var(--loading-bg-color);
+      transition: background-color 0.25s ease;
+      border-radius: 11px;
+      transform: translateY(-50%);
+      cursor: pointer;
+
+      &:after {
+        content: "";
+        position: absolute;
+        left: 3px;
+        top: 3px;
+        width: 16px;
+        height: 16px;
+        display: block;
+        background-color: #fff;
+        border-radius: 50%;
+        transition: left 0.25s ease;
+      }
+    }
+
+    .form-control-error{
+      text-align: start;
+    }
+  }
+
+  .form-control__placeholder {
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .form-control__value {
+    font-weight: 500;
+  }
+
+  textarea {
+    padding: 10px 20px;
+    background: var(--loading-bg-color);
+    z-index: 1;
+    line-height: 40px;
+    border-width: 0;
+    border-radius: 20px;
+    font-size: 14px;
+    resize: none;
+  }
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+  -webkit-box-shadow: 0 0 0 50px var(--secondary-bg) inset !important;
+  box-shadow: 0 0 0 50px var(--secondary-bg) inset !important;
+  color: var(--secondary-color) !important;
+}

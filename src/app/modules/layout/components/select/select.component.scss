@@ -1,0 +1,26 @@
+.select-body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+.search-options {
+  margin-top: 24px;
+  overflow: auto;
+}
+.search-option-container {
+  width: 100%;
+  border-bottom: 1px solid var(--primary-border-color);
+}
+button.search-option {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+.search-empty {
+  text-align: center;
+  font-weight: 400;
+}

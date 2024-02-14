@@ -1,0 +1,26 @@
+<ng-template #popupBody>
+  <div class="select-body">
+    <div class="search-container" *ngIf="config?.search">
+      <div class="form-control-row">
+        <input class="default text" placeholder="Поиск" type="text" #searchInput (input)="searchValue(searchInput.value)">
+      </div>
+    </div>
+    <div class="search-options">
+      @for (item of data; track item){
+        <div class="search-option-container" *ngIf="!item.hidden">
+          <button class="search-option" (click)="selectValue(item.value)" >{{item.label}}</button>
+        </div>
+      }
+    </div>
+
+    <div class="search-empty" *ngIf="visible_options.length === 0">
+      Ничего не найдено
+    </div>
+  </div>
+</ng-template>
+
+<app-popup
+  [body]="popupBody"
+  [title]="title"
+  #popup
+></app-popup>

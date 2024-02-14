@@ -1,0 +1,44 @@
+<header class="w-full">
+  <div class="h-full content">
+    <div class="header-content">
+
+      <ng-container *ngIf="!!header_title">
+        <div class="header-title">
+          @if (header_title.link){
+            <a [routerLink]="header_title.link"><span>{{header_title.title}}</span></a>
+          } @else {
+            <span>{{header_title.title}}</span>
+          }
+        </div>
+      </ng-container>
+
+      <button (click)="userPopup.open()" [lazyLoad]="'/assets/images/icons/user-icon.png'" class="user-icon"></button>
+    </div>
+  </div>
+</header>
+
+
+
+<ng-template #popupBody>
+  <div class="user-info">
+    <div class="user-field name">
+      <span>{{user?.name}}</span>
+    </div>
+    <div class="user-field">
+      <span class="field-name">ID:</span>
+      <span class="field-value">{{user?.id}}</span>
+    </div>
+
+    <div class="user-field">
+      <span class="field-name">Склад:</span>
+      <span class="field-value">{{user?.stock}}</span>
+    </div>
+  </div>
+</ng-template>
+
+<app-popup
+  title="Пользователь"
+  [body]="popupBody"
+  [close_on_overlay]="true"
+  #userPopup
+></app-popup>

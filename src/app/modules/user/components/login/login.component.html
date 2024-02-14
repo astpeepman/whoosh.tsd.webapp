@@ -1,0 +1,71 @@
+<ng-template #formControlError>
+  <span class="row-error">
+    Пожалуйста, введите корректное значение
+    <!--TODO:-->
+    <!--ЛОКАЛИЗАЦИЯ-->
+  </span>
+</ng-template>
+
+<div class="main">
+  <div class="content">
+    <div class="form-container">
+      <div class="form absolute-center">
+        <h1>
+          Авторизация
+          <!--TODO:-->
+          <!--ЛОКАЛИЗАЦИЯ-->
+        </h1>
+
+        <div class="form-logo">
+          <img [lazyLoad]="'/assets/images/logo.png'" class="form-logo" alt="Логотип" height="50" width="50">
+        </div>
+
+        <form [formGroup]="form" (submit)="submit()">
+          <div class="form-fields__container">
+            <div class="form-control-row">
+              <input class="default text" formControlName="username" name="username" #usernameInput placeholder="Логин" type="text">
+              <div class="form-control-error" *ngIf="form.controls['username'].invalid && form.controls['username'].touched">
+                <span class="row-error" *ngIf="form.controls['username'].errors?.server; else formControlError">
+                    {{form.controls['username'].errors?.server}}
+                </span>
+              </div>
+            </div>
+            <div class="form-control-row">
+              <input class="default text" formControlName="password" name="password" #passwordInput  placeholder="Пароль" type="password">
+              <div class="form-control-error" *ngIf="form.controls['password'].invalid && form.controls['password'].touched">
+                <span class="row-error" *ngIf="form.controls['password'].errors?.server; else formControlError">
+                    {{form.controls['password'].errors?.server}}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-button-container">
+            <div class="form-control-error" *ngIf="form.errors?.server">
+              <span class="row-error">
+                  {{form.errors?.server}}
+              </span>
+            </div>
+
+            <button type="submit" class="button">
+              Авторизация
+              <!--TODO:-->
+              <!--ЛОКАЛИЗАЦИЯ-->
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-select
+  [title]="'Выберите логин'"
+  [data]="login_list"
+  [input]="usernameInput"
+  [config]="{
+    search: true
+  }"
+  (select)="selectLogin($event)"
+></app-select>
+

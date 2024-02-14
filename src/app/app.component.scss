@@ -1,0 +1,25 @@
+.network-status-offline {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(var(--color), 0.8);
+  text-align: center;
+  font-size: 14px;
+  padding: 4px;
+  z-index: 10000;
+}
+
+.add-to-homescreen-container {
+  height: 100%;
+  text-align: center;
+  position: relative;
+
+  h3{
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .button{
+    width: 180px;
+  }
+}

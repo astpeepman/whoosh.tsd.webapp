@@ -1,0 +1,67 @@
+header{
+  height: 80px;
+  background: var(--secondary-bg);
+  color: var(--secondary-color);
+  //box-shadow: 0px -20px 40px -20px #00000091 inset;
+  padding: 6px 0;
+  @media screen and (max-width: 768px) {
+    height: 60px;
+  }
+}
+
+:host{
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+}
+
+.header-content {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  padding-right: 50px;
+}
+
+.user-icon{
+  width: 40px;
+  height: 40px;
+  background-position: center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 10;
+}
+
+.user-info {
+  height: 100%;
+  font-size: 18px;
+}
+
+.user-field {
+  margin-top: 12px;
+  &.name{
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  span.field-name {
+    margin-right: 6px;
+  }
+
+  span.field-value {
+    font-weight: 700;
+  }
+}
+
+
+.header-title {
+  font-size: 20px;
+  font-weight: 500;
+}
