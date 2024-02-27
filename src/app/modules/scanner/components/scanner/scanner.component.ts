@@ -1,4 +1,13 @@
-import {afterNextRender, AfterViewInit, Component, ElementRef, Inject, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  afterNextRender,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject, Input, Output,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {
   NgxScannerQrcodeComponent,
   NgxScannerQrcodeModule,
@@ -8,6 +17,11 @@ import {
 import {LoaderComponent} from "../../../layout/components/loader/loader.component";
 import {AsyncPipe, isPlatformBrowser, NgClass, NgIf, NgStyle} from "@angular/common";
 import {LazyLoadImageModule} from "ng-lazyload-image";
+
+
+export interface IScannerConfig{
+  stop_on_scan: boolean;
+}
 
 @Component({
   selector: 'app-scanner',
@@ -25,8 +39,14 @@ import {LazyLoadImageModule} from "ng-lazyload-image";
   styleUrl: './scanner.component.scss'
 })
 export class ScannerComponent {
+  @Input('config') cfg: IScannerConfig = {
+    stop_on_scan: true
+  };
+
   @ViewChild('action') action!: NgxScannerQrcodeComponent;
   @ViewChild('scannerContainer') scanner_container!: ElementRef;
+
+  @Output() scanned = new EventEmitter<ScannerQRCodeResult[]>();
 
   protected devices: ScannerQRCodeDevice[] = null;
   protected torcher: boolean = false;
@@ -140,7 +160,10 @@ export class ScannerComponent {
     this.action.stop();
   }
 
-  protected onScan(e: ScannerQRCodeResult[], action?: any){
-    console.log(e);
+  protected onScan(e: ScannerQRCodeResult[]){
+    if (this.cfg.stop_on_scan){
+      this.stop();
+    }
+    this.scanned.emit(e);
   }
 }
