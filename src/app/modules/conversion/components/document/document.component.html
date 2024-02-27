@@ -1,0 +1,21 @@
+<div class="main">
+  <div class="subheader">
+    <div class="content">
+      <div class="router">
+        <a [routerLink]="['/conversion/document']" #rlaRemains="routerLinkActive" routerLinkActive [ngClass]="{'active': rlaRemains.isActive && !rlaGoodList.isActive}" [state]="{document: document}">Остатки</a>
+        <a [routerLink]="['/conversion/document/good-list']" #rlaGoodList="routerLinkActive" routerLinkActive [ngClass]="{'active': rlaGoodList.isActive}">Список товаров</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="container-outlet">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+
+
+<app-header></app-header>

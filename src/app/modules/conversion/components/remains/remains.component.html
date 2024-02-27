@@ -1,0 +1,35 @@
+<div class="body">
+  <div class="remain-list" *ngIf="remain_list">
+    <div class="remain-item" *ngFor="let remain of remain_list">
+      <div class="title">
+        <span>{{remain.object.name}}</span>
+      </div>
+      <div class="remain-body">
+        <div class="fields">
+          <div class="field">
+            <div class="field-name"><span>Cостояние:</span></div>
+            <div class="field-value"><span>{{remain.object.property}}</span></div>
+          </div>
+          <div class="field">
+            <div class="field-name"><span>Вендор:</span></div>
+            <div class="field-value"><span>{{remain.object.vendor_code}}</span></div>
+          </div>
+          <div class="field">
+            <div class="field-name"><span>Мастер:</span></div>
+            <div class="field-value"><span>{{remain.object.master_code}}</span></div>
+          </div>
+
+          <div class="field" *ngIf="!!remain.object.models">
+            <div class="field-name"><span>Модели:</span></div>
+            <div class="field-value"><span>{{remain.object.models}}</span></div>
+          </div>
+        </div>
+        <div class="quantity">
+          <span>{{remain.quantity}} {{remain.object.unit}}</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

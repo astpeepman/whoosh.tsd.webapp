@@ -1,0 +1,96 @@
+<div class="body">
+  <div class="remain-list" *ngIf="my_remain_list">
+    <div class="remain-item" *ngFor="let remain of my_remain_list">
+      <div class="title">
+        <span>{{remain.object.name}}</span>
+      </div>
+      <div class="remain-body">
+        <div class="fields">
+          <div class="field">
+            <div class="field-name"><span>Cостояние:</span></div>
+            <div class="field-value"><span>{{remain.object.property}}</span></div>
+          </div>
+          <div class="field">
+            <div class="field-name"><span>Вендор:</span></div>
+            <div class="field-value"><span>{{remain.object.vendor_code}}</span></div>
+          </div>
+          <div class="field">
+            <div class="field-name"><span>Мастер:</span></div>
+            <div class="field-value"><span>{{remain.object.master_code}}</span></div>
+          </div>
+
+          <div class="field" *ngIf="!!remain.object.models">
+            <div class="field-name"><span>Модели:</span></div>
+            <div class="field-value"><span>{{remain.object.models}}</span></div>
+          </div>
+        </div>
+        <div class="quantity">
+          <span>{{remain.quantity}} {{remain.object.unit}}</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="footer">
+  <button class="footer-btn">
+    <img class="btn-icon" lazyLoad="/assets/images/icons/camera-icon.png">
+    <span class="placeholder">Сканировать</span>
+  </button>
+  <button class="footer-btn">
+    <img class="btn-icon" lazyLoad="/assets/images/icons/refresh-icon.png">
+    <span class="placeholder">Обновить</span>
+  </button>
+  <button class="footer-btn" #searchBtn>
+    <img class="btn-icon" lazyLoad="/assets/images/icons/search-icon.png">
+    <span class="placeholder">Подобрать</span>
+  </button>
+  <button class="footer-btn">
+    <img class="btn-icon" lazyLoad="/assets/images/icons/exit-icon.png">
+    <span class="placeholder">Завершить</span>
+  </button>
+</div>
+
+<ng-template #goodSelectOption let-item="item">
+  <div class="good-select-item">
+    <div class="title">
+      <span>{{item.name}}</span>
+    </div>
+    <div class="body">
+      <div class="fields">
+        <div class="field">
+          <div class="field-name"><span>Cостояние:</span></div>
+          <div class="field-value"><span>{{item.property}}</span></div>
+        </div>
+        <div class="field">
+          <div class="field-name"><span>Вендор:</span></div>
+          <div class="field-value"><span>{{item.vendor_code}}</span></div>
+        </div>
+        <div class="field">
+          <div class="field-name"><span>Мастер:</span></div>
+          <div class="field-value"><span>{{item.master_code}}</span></div>
+        </div>
+
+        <div class="field" *ngIf="!!item.models">
+          <div class="field-name"><span>Модели:</span></div>
+          <div class="field-value"><span>{{item.models}}</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<app-select
+  title="Подбор"
+  [data]="good_select_list"
+  [input]="searchBtn"
+  [config]="{
+    search: goodSearch.bind(this),
+    template: goodSelectOption
+  }"
+  (select)="selectGood($event)"
+></app-select>
