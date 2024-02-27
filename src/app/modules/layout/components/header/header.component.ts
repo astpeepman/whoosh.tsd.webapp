@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {IUser} from "../../../user/models/user";
 import {UserService} from "../../../user/services/user.service";
 import {PopupComponent} from "../popup/popup.component";
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 import {NgIf, NgTemplateOutlet} from "@angular/common";
 import {IHeaderTitle} from "../../models/header";
 import {HeaderService} from "../../services/header.service";
@@ -16,7 +16,8 @@ import {LazyLoadImageModule} from "ng-lazyload-image";
     RouterLink,
     NgTemplateOutlet,
     NgIf,
-    LazyLoadImageModule
+    LazyLoadImageModule,
+    RouterLinkActive
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

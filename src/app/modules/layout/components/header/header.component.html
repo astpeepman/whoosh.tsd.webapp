@@ -1,7 +1,7 @@
 <header class="w-full">
   <div class="h-full content">
     <div class="header-content">
-
+      <a routerLink="/" routerLinkActive="hidden" class="home-route" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact: true}" lazyLoad="/assets/images/icons/home-icon.png"></a>
       <ng-container *ngIf="!!header_title">
         <div class="header-title">
           @if (header_title.link){
