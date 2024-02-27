@@ -1,16 +1,19 @@
 import {Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
 import {PopupComponent} from "../popup/popup.component";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {ReactiveFormsModule} from "@angular/forms";
+import {BehaviorSubject} from "rxjs";
 
 export interface SelectOption{
   label: string;
   value: any;
-  hidden?: boolean
+  hidden?: boolean,
+  template?: TemplateRef<any>
 }
 
 export interface SelectConfig{
-  search?: boolean;
+  search?: boolean | ((text: string) => SelectOption[] | Promise<SelectOption[]>);
+  template?: TemplateRef<any>
 }
 
 @Component({
@@ -20,7 +23,8 @@ export interface SelectConfig{
     PopupComponent,
     NgIf,
     ReactiveFormsModule,
-    NgForOf
+    NgForOf,
+    NgTemplateOutlet
   ],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss'
@@ -28,7 +32,7 @@ export interface SelectConfig{
 export class SelectComponent implements OnInit{
   @Input('title') title: string = null;
   @Input('data') data!: SelectOption[];
-  @Input('input') input!: HTMLInputElement;
+  @Input('input') input!: HTMLInputElement | HTMLButtonElement;
   @Input('config') config: SelectConfig;
 
   @ViewChild('popup') popup: PopupComponent;
@@ -41,7 +45,8 @@ export class SelectComponent implements OnInit{
       this.popup.open();
     }
 
-    this.input.readOnly = true;
+    if (this.input instanceof HTMLInputElement)
+      this.input.readOnly = true;
   }
 
   selectValue(value: any){
@@ -50,20 +55,36 @@ export class SelectComponent implements OnInit{
   }
 
   searchValue(text: string = null){
-    this.data.forEach((option)=>{
-      if (!text){
-        option.hidden = false;
+    if (typeof this.config.search === 'boolean')
+      this.data.forEach((option)=>{
+        if (!text){
+          option.hidden = false;
+        }
+
+        if (!option.label.includes(text)){
+          option.hidden = true
+        }
+      })
+    else if (typeof this.config.search === 'function'){
+      const func_result = this.config.search(text);
+      if (func_result instanceof Array) {
+        this.data = func_result;
       }
 
-      if (!option.label.includes(text)){
-        option.hidden = true
+      if (func_result instanceof Promise){
+        func_result.then((options: SelectOption[])=>{
+          this.data = options;
+        })
       }
-    })
+    }
   }
 
   get visible_options(){
-    return this.data.filter((option)=>{
-      return !option.hidden;
-    })
+    if (this.data)
+      return this.data.filter((option)=>{
+        return !option.hidden;
+      })
+
+    return this.data;
   }
 }
