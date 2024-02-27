@@ -31,7 +31,7 @@ export class UserService {
       }
     ).pipe(
       tap((token)=>{
-        this.cookies.set("auth_token", token.token, 3600 * 24 * 30, null, null, true, "None");
+        this.cookies.set("auth_token", token.token, 3600 * 24 * 30, "/", null, true, "None");
       })
     );
   }
