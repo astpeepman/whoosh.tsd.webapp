@@ -13,3 +13,9 @@ export interface ITableSchema{
   name: string;
   schema: string;
 }
+
+export enum DatabaseStatus{
+  STORES,
+  OPENED,
+  CLOSED
+}

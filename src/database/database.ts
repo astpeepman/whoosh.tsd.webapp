@@ -1,10 +1,10 @@
 import {Inject, Injectable, OnDestroy, PLATFORM_ID} from "@angular/core";
-import Dexie, {Table} from "dexie";
-import {ITableSchema} from "./models";
-import {Table as InstanceTable} from "./tables/base";
+import Dexie, {PromiseExtended, Table} from "dexie";
+import {DatabaseStatus, ITableSchema} from "./models";
+import {isPlatformBrowser} from "@angular/common";
 import {GoodTable} from "./tables/good";
 import {CellTable} from "./tables/cell";
-import {isPlatformBrowser} from "@angular/common";
+import {BehaviorSubject} from "rxjs";
 
 export const DB_NAME = 'tsd';
 
@@ -13,9 +13,10 @@ export const DB_NAME = 'tsd';
 })
 export class AppDatabase extends Dexie {
   public readonly version_number = 1;
+  public status$: BehaviorSubject<DatabaseStatus> = new BehaviorSubject<DatabaseStatus>(null);
 
   constructor() {
-    super(DB_NAME);
+    super(DB_NAME, {autoOpen: false});
   }
 
   public async clear(){
@@ -26,19 +27,40 @@ export class AppDatabase extends Dexie {
     console.log('DB deleted.');
   }
 
-  public getColumns<T extends Record<string, any>>(instance: T): string {
-    return (Object.keys(instance) as (keyof T)[]).sort((a: keyof T, b: keyof T)=>{
-      if (a.toString() === "id"){
-        return -1;
-      }
-      else if (b.toString() === "id"){
-        return 1;
-      }
-      return 0;
-    }).join(',');
+  public override open(): PromiseExtended<Dexie>{
+    this.status$.next(DatabaseStatus.OPENED);
+    return super.open();
+  }
+
+  public override close(){
+    this.status$.next(DatabaseStatus.CLOSED);
+    return super.close();
+  }
+
+  public getColumns<T extends Record<string, any>>(instance: T, primary_key: string | string[] = "id", additional_columns: string[] = []): string {
+    let column_list = Object.keys(instance) as (keyof T)[];
+
+    if (typeof primary_key === 'string')
+      column_list.sort((a: keyof T, b: keyof T)=>{
+        if (a.toString() === primary_key){
+          return -1;
+        }
+        else if (b.toString() === primary_key){
+          return 1;
+        }
+        return 0;
+      });
+    else
+      column_list.unshift(`[${primary_key.join('+')}]`);
+
+    if (additional_columns.length){
+      column_list = [...column_list, ...additional_columns];
+    }
+    return column_list.join(',');
   }
 
   public stores(schema: {[p: string]: string}){
+    this.status$.next(DatabaseStatus.STORES);
     return this.version(this.version_number).stores(schema);
   }
 
@@ -84,15 +106,25 @@ export class DataBase implements OnDestroy{
     private db: AppDatabase,
     @Inject(PLATFORM_ID) private platform: string,
   ) {
-    const good_table = new GoodTable(db);
-    const cell_table = new CellTable(db);
+    const tables = {
+      good: new GoodTable(db),
+      cell: new CellTable(db)
+    }
+
+    let schemas = {};
+    Object.values(tables).forEach((table)=>{
+      Object.assign(schemas, table.schema);
+    });
+
+    this.db.stores(schemas);
 
     if (isPlatformBrowser(this.platform)){
-      if (!db.isOpen())
-        db.open();
-
-      console.log(db.isOpen())
-      // db.migrate().then();
+      if (!this.db.isOpen()){
+        this.db.open().catch (function (err) {
+          console.error('Failed to open db: ' + (err.stack || err));
+        });
+      }
+     this.db.migrate();
     }
   }
 
