@@ -7,9 +7,15 @@ export const routes: Routes = [
     path: '',
     component: MainComponent,
     canActivate: [authGuard],
+
   },
   {
     path: 'user',
     loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule),
+  },
+  {
+    path: 'conversion',
+    loadChildren: () => import('./modules/conversion/conversion.module').then(m=>m.ConversionModule),
+    canActivate: [authGuard],
   }
 ];
