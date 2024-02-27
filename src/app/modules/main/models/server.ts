@@ -26,12 +26,16 @@ export declare namespace Server{
     quantity: number;
   }
 
-  interface ResponseObject<T>{
+  interface ResponseObject<T, K>{
     object: T;
-    remain_list: Remain<T>
+    remain_list: Remain<K>[];
   }
 
   interface DocumentInventory extends BaseDocument{
-    response_cell: ResponseObject<Cell>;
+    response_cell: ResponseObject<Cell, Good>;
+  }
+
+  interface DocumentConversion extends BaseDocument{
+    response_cell: ResponseObject<Cell, Good>;
   }
 }
