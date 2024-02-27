@@ -2,7 +2,7 @@
 <div class="main">
   <div class="content">
     <div class="btn-container">
-      <button class="func-btn">
+      <button class="func-btn" (click)="startScanner(ScanType.INVENTORY)">
         <div class="icon-container">
           <div [lazyLoad]="'/assets/images/icons/inventory-icon.png'" class="absolute-center rounded-full icon"></div>
         </div>
@@ -10,7 +10,7 @@
       </button>
 
       <button class="func-btn">
-        <div class="icon-container">
+        <div class="icon-container" (click)="startScanner(ScanType.CONVERSION)">
           <div [lazyLoad]="'/assets/images/icons/warehouse-icon.png'" class="absolute-center rounded-full icon"></div>
         </div>
         <span class="text">Переход на склад</span>
@@ -37,26 +37,26 @@
         <span class="text">Перемещение</span>
       </button>
     </div>
-
-<!--    <button (click)="startCam()">Запустить камеру</button>-->
   </div>
-
-
-
-
 </div>
 
 
 <app-header></app-header>
 
 
-<!--<ng-template #popupBody>-->
-<!--    <app-scanner #scanner style="width: calc(100% + 48px);margin: 0 -24px;"></app-scanner>-->
-<!--</ng-template>-->
+<ng-template #popupBody>
+    <app-scanner
+      (scanned)="onScan($event)"
+      [config]="{
+        stop_on_scan: true
+      }"
+      #scanner
+      style="width: calc(100% + 48px);margin: 0 -24px;"></app-scanner>
+</ng-template>
 
-<!--<app-popup-->
-<!--  [body]="popupBody"-->
-<!--  (display_event)="onDisplay($event)"-->
-<!--  #popup-->
-<!--&gt;</app-popup>-->
+<app-popup
+  [body]="popupBody"
+  (display_event)="onScannerDisplay($event)"
+  #popup
+></app-popup>
 
