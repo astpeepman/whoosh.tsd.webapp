@@ -1,4 +1,6 @@
 import {
+  afterRender,
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter, Inject,
@@ -20,8 +22,10 @@ import {CommonModule, DOCUMENT} from "@angular/common";
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss'
 })
-export class PopupComponent implements OnInit{
+export class PopupComponent{
   @ViewChild('popupModal', {static: false}) popupModal!: ElementRef;
+  @ViewChild('popupHeader') popup_header!: ElementRef;
+  @ViewChild('popupBody') popup_body!: ElementRef;
 
   @Input() title = '';
   @Input() body!: TemplateRef<any>;
@@ -30,6 +34,8 @@ export class PopupComponent implements OnInit{
 
   @Output() display_event = new EventEmitter<boolean>();
 
+  private display: boolean = false;
+
   constructor(
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document,
@@ -37,22 +43,30 @@ export class PopupComponent implements OnInit{
   ) {
   }
 
-  ngOnInit(): void {
-  }
+
 
 
   public open(){
     this.renderer.addClass(this.elRef.nativeElement, "show-in");
     this.renderer.setStyle(this.document.body, 'overflow', 'hidden');
 
-    this.display_event.emit(true);
+    const header_height = this.popup_header.nativeElement.clientHeight;
+    this.renderer.setStyle(this.popup_body.nativeElement, 'height', `calc(100% - ${header_height + 24}px)`);
+
+    if (!this.display)
+      this.display_event.emit(true);
+
+    this.display = true;
   }
 
   public close(){
     this.renderer.removeClass(this.elRef.nativeElement, "show-in");
     this.renderer.removeStyle(this.document.body, 'overflow');
 
-    this.display_event.emit(false);
+    if (this.display)
+      this.display_event.emit(false);
+
+    this.display = false;
   }
 
   protected touchMoveMobilePopup($event: TouchEvent){
