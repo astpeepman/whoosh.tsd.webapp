@@ -11,7 +11,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (user_service.is_auth){
     const request = req.clone({
       setHeaders: {
-        Token: user_service.token
+        token: user_service.token
       }
     });
 
