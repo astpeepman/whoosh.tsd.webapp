@@ -37,6 +37,16 @@
         "timeout": "5s",
         "maxSize": 5
       }
+    },
+    {
+      "name": "api",
+      "urls": ["https://acc.whoosh-cloud.com/ut_qa0/hs/tsd/**"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxAge": "48h",
+        "timeout": "10s",
+        "maxSize": 50
+      }
     }
   ]
 }
